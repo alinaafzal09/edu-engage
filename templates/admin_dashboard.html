@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap optional for layout -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+  <style>
+    /* ---- Colors ---- */
+    :root {
+      --primary: #0d6efd;    /* Blue */
+      --accent: #6610f2;     /* Purple */
+      --bg: #f8f9fa;         /* Light Gray */
+      --text-dark: #212529;
+    }
+
+    /* ---- Global ---- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      display: flex;
+      background-color: var(--bg);
+      min-height: 100vh;
+    }
+
+    a {
+      text-decoration: none;
+      color: white;
+    }
+
+    /* ---- Sidebar ---- */
+    #sidebar-wrapper {
+      width: 220px;
+      background-color: var(--primary);
+      display: flex;
+      flex-direction: column;
+      padding: 20px 0;
+    }
+
+    .sidebar-heading {
+      font-size: 24px;
+      font-weight: 700;
+      text-align: center;
+      color: white;
+      margin-bottom: 30px;
+    }
+
+    .list-group-item {
+      background-color: transparent;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      transition: all 0.3s;
+    }
+
+    .list-group-item:hover {
+      background-color: var(--accent);
+      color: white;
+      transform: translateX(5px);
+    }
+
+    .btn-danger {
+      background-color: #dc3545;
+      border: none;
+      transition: background-color 0.3s;
+    }
+
+    .btn-danger:hover {
+      background-color: #b02a37;
+    }
+
+    /* ---- Page Content ---- */
+    #page-content-wrapper {
+      flex: 1;
+      padding: 20px 40px;
+    }
+
+    /* ---- Navbar ---- */
+    .navbar {
+      background-color: var(--bg);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+
+    /* ---- Cards ---- */
+    .card {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      padding: 20px;
+      animation: fadeIn 1s ease;
+    }
+
+    /* ---- Notice Table ---- */
+    .notice-table-container {
+      max-height: 300px; /* fixed height */
+      overflow-y: auto;
+      margin-top: 20px;
+      border-radius: 10px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+    }
+
+    th, td {
+      padding: 10px 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    tr:hover {
+      background-color: #f1f3f5;
+      transform: translateX(2px);
+      transition: all 0.2s;
+    }
+
+    /* ---- Animations ---- */
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+
+    @keyframes slideUp {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    /* ---- Responsive ---- */
+    @media (max-width: 768px) {
+      #sidebar-wrapper {
+        width: 100%;
+        flex-direction: row;
+        overflow-x: auto;
+      }
+      #page-content-wrapper {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="bg-primary" id="sidebar-wrapper">
+    <div class="sidebar-heading">CollegePortal</div>
+    <div class="list-group list-group-flush">
+      <a href="{{ url_for('admin.admin_dashboard') }}" class="list-group-item">Dashboard</a>
+      <a href="{{ url_for('admin.manage_events') }}" class="list-group-item">Manage Events</a>
+      <a href="{{ url_for('admin.send_notice') }}" class="list-group-item">Send Notices</a>
+      <a href="{{ url_for('admin.reports') }}" class="list-group-item">Reports</a>
+      <a href="{{ url_for('auth.logout') }}" class="btn btn-danger mx-3 mt-3">Logout</a>
+    </div>
+  </div>
+
+  <!-- Page Content -->
+  <div id="page-content-wrapper">
+    <nav class="navbar navbar-expand-lg navbar-light border-bottom">
+      <div class="container-fluid">
+        <h4 class="mb-0">Admin Dashboard</h4>
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <h1 class="mt-3" style="animation: slideUp 1s ease;">Welcome, {{admin_name}}!</h1>
+      <p>Use the sidebar to manage events, send notices, and view reports.</p>
+
+      <!-- Top Cards -->
+      <div class="row mt-4">
+        <div class="col-md-4 mb-3">
+          <div class="card">Total Students: {{ total_students }}</div>
+        </div>
+        <div class="col-md-4 mb-3">
+          <div class="card">Total Events: {{ total_events }}</div>
+        </div>
+        <div class="col-md-4 mb-3">
+          <div class="card">Pending Notices: {{ pending_notices }}</div>
+        </div>
+      </div>
+
+      <!-- Notice History Table -->
+      <div class="card mt-4">
+        <div class="card-header bg-primary text-white">Notices History</div>
+        <div class="notice-table-container">
+          <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Content</th>
+                <th>Recipient</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for notice in notices %}
+              <tr style="animation: slideUp 0.5s ease;">
+                <td>{{ notice.title }}</td>
+                <td>{{ notice.content }}</td>
+                <td>{{ notice.recipient_name }}</td>
+                <td>{{ notice.sent_at.strftime('%Y-%m-%d %H:%M') }}</td>
+              </tr>
+              {% else %}
+              <tr>
+                <td colspan="4">No notices have been sent yet.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

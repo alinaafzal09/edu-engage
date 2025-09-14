@@ -1,0 +1,90 @@
+/* ---------------- Sidebar ---------------- */
+#sidebar-wrapper {
+  min-width: 200px;
+  max-width: 200px;
+}
+
+/* ---------------- Body & Containers ---------------- */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f2f5;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.card {
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.card-title {
+  color: #007bff; 
+}
+
+.card-title a, .card-title {
+  color: #007bff !important;
+}
+
+/* ---------------- Logo Container ---------------- */
+.logo-container {
+  text-align: center; /* Center logo */
+  padding: 20px 0;    
+}
+
+/* The logo itself */
+.app-logo {
+  max-width: 400px;  /* Larger max width */
+  width: 80%;       /* Responsive */
+  height: auto;
+  opacity: 1;
+  transition: opacity 1s ease, filter 1s ease;
+}
+
+/* Blur on hover */
+.app-logo:hover {
+  filter: blur(2px);
+}
+
+/* ---------------- Welcome Text & Login Button ---------------- */
+.welcome-text, 
+.login-btn {
+  opacity: 0; /* hidden initially */
+  transition: opacity 1s ease;
+}
+
+.welcome-text {
+  text-align: center;
+  font-size: 2rem;
+  margin-top: 20px;
+}
+
+.login-btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 25px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+/* Center everything in landing page */
+.landing-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; 
+  text-align: center;
+}

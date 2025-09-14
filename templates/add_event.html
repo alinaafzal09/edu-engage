@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add New Event</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        :root {
+            --primary: #0d6efd;
+            --accent: #6610f2;
+            --bg: #f8f9fa;
+            --text-dark: #212529;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-color: var(--bg);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        /* ---- Sidebar ---- */
+        #sidebar-wrapper {
+            width: 220px;
+            background-color: var(--primary);
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+        }
+
+        .sidebar-heading {
+            font-size: 24px;
+            font-weight: 700;
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .list-group-item {
+            background-color: transparent;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            transition: all 0.3s;
+        }
+
+        .list-group-item:hover, .list-group-item.active {
+            background-color: var(--accent);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border: none;
+            transition: background-color 0.3s;
+        }
+
+        .btn-danger:hover {
+            background-color: #b02a37;
+        }
+
+        /* ---- Page Content ---- */
+        #page-content-wrapper {
+            flex: 1;
+            padding: 30px 40px;
+        }
+
+        h1 {
+            animation: slideUp 1s ease;
+        }
+
+        /* ---- Form Card ---- */
+        form {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            animation: fadeIn 1s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            border: none;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent);
+        }
+
+        .btn-secondary {
+            background-color: #dee2e6;
+            color: var(--text-dark);
+            border: none;
+        }
+
+        .btn-secondary:hover {
+            background-color: #ced4da;
+        }
+
+        /* ---- Animations ---- */
+        @keyframes fadeIn {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+
+        @keyframes slideUp {
+            from {opacity: 0; transform: translateY(20px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+
+        /* ---- Responsive ---- */
+        @media (max-width: 768px) {
+            #sidebar-wrapper {
+                width: 100%;
+                flex-direction: row;
+                overflow-x: auto;
+            }
+            #page-content-wrapper {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="d-flex" id="wrapper">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <div class="sidebar-heading">CollegePortal</div>
+            <div class="list-group list-group-flush">
+                <a href="{{ url_for('admin.admin_dashboard') }}" class="list-group-item">Dashboard</a>
+                <a href="{{ url_for('admin.manage_events') }}" class="list-group-item active">Manage Events</a>
+                <a href="{{ url_for('admin.send_notice') }}" class="list-group-item">Send Notices</a>
+                <a href="{{ url_for('admin.reports') }}" class="list-group-item">Reports</a>
+                <a href="{{ url_for('auth.logout') }}" class="btn btn-danger mx-3 mt-3">Logout</a>
+            </div>
+        </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <h1 class="mt-4">Add New Event</h1>
+                <hr>
+
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <div class="alert alert-info">{{ messages[0] }}</div>
+                    {% endif %}
+                {% endwith %}
+
+                <form action="{{ url_for('admin.add_event') }}" method="POST">
+                    <div class="mb-3">
+                        <label for="event_name" class="form-label">Event Name</label>
+                        <input type="text" class="form-control" id="event_name" name="event_name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="event_date" class="form-label">Event Date</label>
+                        <input type="date" class="form-control" id="event_date" name="event_date" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="event_time" class="form-label">Event Time</label>
+                        <input type="time" class="form-control" id="event_time" name="event_time" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="location" class="form-label">Location</label>
+                        <input type="text" class="form-control" id="location" name="location" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Event</button>
+                    <a href="{{ url_for('admin.manage_events') }}" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

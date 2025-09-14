@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>College Portal Landing</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ---- Colors ---- */
+    :root {
+      --primary: #0d6efd;    /* Blue */
+      --accent: #6610f2;     /* Purple */
+      --bg: #f8f9fa;         /* Light Gray */
+      --text-dark: #212529;
+    }
+
+    /* ---- Global ---- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    a {
+      text-decoration: none;
+      color: white;
+    }
+
+    /* ---- Landing Container ---- */
+    .landing-container {
+      text-align: center;
+      background-color: white;
+      padding: 80px 40px;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      animation: fadeIn 1s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ---- Logo ---- */
+    .app-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 30px;
+      animation: fadeIn 1s ease;
+    }
+
+    .app-logo svg {
+      margin-right: 10px;
+    }
+
+    /* ---- Welcome Text ---- */
+    .welcome-text {
+      font-size: 28px;
+      color: var(--text-dark);
+      margin-bottom: 40px;
+      animation: slideUp 1s ease;
+    }
+
+    /* ---- Login Button ---- */
+    .login-btn {
+      display: inline-block;
+      padding: 15px 40px;
+      background-color: var(--primary);
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: 600;
+      transition: background-color 0.3s, transform 0.3s;
+      animation: fadeIn 1.5s ease;
+    }
+
+    .login-btn:hover {
+      background-color: var(--accent);
+      transform: scale(1.05);
+    }
+
+    /* ---- Animations ---- */
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+
+    @keyframes slideUp {
+      from {opacity: 0; transform: translateY(30px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    /* ---- Responsive ---- */
+    @media (max-width: 600px) {
+      .landing-container {
+        padding: 60px 20px;
+      }
+
+      .app-logo {
+        font-size: 36px;
+      }
+
+      .welcome-text {
+        font-size: 22px;
+      }
+
+      .login-btn {
+        padding: 12px 30px;
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="landing-container">
+    <!-- Text-based Logo with optional icon -->
+    <div class="app-logo" id="logo">
+      <svg width="36" height="36" fill="var(--primary)" class="bi bi-book" viewBox="0 0 16 16">
+        <path d="M1 2.828c.885-.37 2.154-.828 4-.828s3.115.458 4 .828V13c-.885-.37-2.154-.828-4-.828s-3.115.458-4 .828V2.828z"/>
+        <path d="M9 2.828c.885-.37 2.154-.828 4-.828s3.115.458 4 .828V13c-.885-.37-2.154-.828-4-.828s-3.115.458-4 .828V2.828z"/>
+      </svg>
+      CollegePortal
+    </div>
+
+    <!-- Welcome text -->
+    <h1 class="welcome-text" id="welcome-text">Welcome to the College Portal</h1>
+
+    <!-- Login button -->
+    <a href="{{ url_for('auth.login') }}" class="login-btn" id="login-btn" aria-label="Login to College Portal">Login</a>
+  </div>
+
+  <!-- Optional JS for extra animations -->
+  <script src="{{ url_for('static', filename='landing.js') }}"></script>
+
+</body>
+</html>
