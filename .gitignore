@@ -1,0 +1,7 @@
+# Environment & cache
+.venv/
+__pycache__/
+.env
+
+# VSCode
+.vscode/
