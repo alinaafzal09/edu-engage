@@ -1,8 +1,17 @@
 import os
+from dotenv import load_dotenv 
 
-class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY') 
-    MYSQL_HOST = os.environ.get('MYSQL_HOST') or 'localhost'
-    MYSQL_USER = os.environ.get('MYSQL_USER') or 'app_user'
-    MYSQL_PASSWORD = os.environ.get('MYSQL_PASSWORD') or ''
-    MYSQL_DB = os.environ.get('MYSQL_DB') or 'CollegeeventDB'
+
+load_dotenv()
+
+# --- PostgreSQL Config ---
+# It's build the database URI dynamically from environment variables
+POSTGRES_USER = os.getenv("POSTGRES_USER")
+POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
+POSTGRES_HOST = os.getenv("POSTGRES_HOST")
+POSTGRES_PORT = os.getenv("POSTGRES_PORT", "5432")        
+POSTGRES_DB = os.getenv("POSTGRES_DB")
+
+
+# Secret key for sessions
+SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key")

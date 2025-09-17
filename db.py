@@ -1,4 +1,4 @@
-import mysql.connector
+import psycopg2
 import os
 from dotenv import load_dotenv
 
@@ -6,10 +6,13 @@ from dotenv import load_dotenv
 load_dotenv()
 
 def get_db_connection():
-    conn = mysql.connector.connect(
-        host=os.getenv('MYSQL_HOST', 'localhost'),
-        user=os.getenv('MYSQL_USER', 'root'),
-        password=os.getenv('MYSQL_PASSWORD'),
-        database=os.getenv('MYSQL_DB')
+    """Return a psycopg2 connection to Postgres using env vars."""
+    conn = psycopg2.connect(
+        host=os.getenv("POSTGRES_HOST"),
+        port=os.getenv("POSTGRES_PORT", "5432"),
+        user=os.getenv("POSTGRES_USER"),
+        password=os.getenv("POSTGRES_PASSWORD", ""),
+        database=os.getenv("POSTGRES_DB")
     )
     return conn
+

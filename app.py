@@ -4,10 +4,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from pathlib import Path
-import mysql.connector
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from werkzeug.security import generate_password_hash, check_password_hash
-from config import Config
+import config
 from datetime import datetime
 from routes.event import event_bp
 
@@ -18,13 +17,18 @@ app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY')
 
 
+import psycopg2
+import os
+
 def get_db_connection():
-    return mysql.connector.connect(
-        host=os.getenv('MYSQL_HOST'),
-        user=os.getenv('MYSQL_USER'),
-        password=os.getenv('MYSQL_PASSWORD'),
-        database=os.getenv('MYSQL_DB')
+    return psycopg2.connect(
+        host=os.getenv("POSTGRES_HOST"),
+        database=os.getenv("POSTGRES_DB"),
+        user=os.getenv("POSTGRES_USER"),
+        password=os.getenv("POSTGRES_PASSWORD"),
+        port=os.getenv("POSTGRES_PORT", 5432)
     )
+
 
 # routes
 @app.route('/')
