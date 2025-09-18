@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-
+import mysql.connector
 from pathlib import Path
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -17,16 +17,15 @@ app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY')
 
 
-import psycopg2
-import os
 
 def get_db_connection():
-    return psycopg2.connect(
-        host=os.getenv("POSTGRES_HOST"),
-        database=os.getenv("POSTGRES_DB"),
-        user=os.getenv("POSTGRES_USER"),
-        password=os.getenv("POSTGRES_PASSWORD"),
-        port=os.getenv("POSTGRES_PORT", 5432)
+    """Connect to MySQL database using environment variables."""
+    return mysql.connector.connect(
+        host=os.getenv("MYSQL_HOST"),
+        database=os.getenv("MYSQL_DB"),
+        user=os.getenv("MYSQL_USER"),
+        password=os.getenv("MYSQL_PASSWORD"),
+        port=int(os.getenv("MYSQL_PORT", 3306))
     )
 
 

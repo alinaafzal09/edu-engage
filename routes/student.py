@@ -1,9 +1,7 @@
-import os, sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
+import os
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 from werkzeug.security import generate_password_hash, check_password_hash
-import psycopg2
+import mysql.connector
 
 from db import get_db_connection
 
@@ -138,7 +136,7 @@ def register_event():
         flash('Registration successful!')
         return redirect(url_for('confirm_registration', event_id=event_id))
         
-    except psycopg2.Error as err:
+    except mysql.Error as err:
      flash(f"Error: {err}")
     
     finally:
