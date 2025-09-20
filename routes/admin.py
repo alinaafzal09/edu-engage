@@ -10,12 +10,13 @@ from db import get_db_connection
 
 admin_bp = Blueprint('admin', __name__)
 
+# In your routes/admin.py file
+
 @admin_bp.route('/admin_dashboard')
 def admin_dashboard():
     # Check if the user is logged in and is an admin or organizer
     user_role = session.get('user_role')
     if user_role not in ('admin', 'organizer'):
-        # Redirect to login with the correct endpoint
         return redirect(url_for('auth.login'))
 
     conn = None
@@ -25,10 +26,20 @@ def admin_dashboard():
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
 
-        #  Fetching Notices with Department Names
+        # === Add these queries for the dashboard totals ===
+        cursor.execute("SELECT COUNT(*) FROM students")
+        total_students = cursor.fetchone()['COUNT(*)']
+
+        cursor.execute("SELECT COUNT(*) FROM events")
+        total_events = cursor.fetchone()['COUNT(*)']
+
+        cursor.execute("SELECT COUNT(*) FROM notices")
+        total_notices = cursor.fetchone()['COUNT(*)']
+        
+        # === Existing queries for lists ===
         query_notices = """
             SELECT n.title, n.content, n.sent_at,
-                   CASE 
+                   CASE
                        WHEN n.recipient_id IS NULL THEN 'All Students'
                        ELSE d.name
                    END AS recipient_name
@@ -42,7 +53,7 @@ def admin_dashboard():
         query_events = "SELECT * FROM events ORDER BY event_date DESC"
         cursor.execute(query_events)
         events = cursor.fetchall()
-
+        
         query_registrations = """
             SELECT r.reg_id, s.name AS student_name, s.email, e.event_name
             FROM registrations r
@@ -56,7 +67,6 @@ def admin_dashboard():
     except Exception as e:
         print(f"Database error: {e}")
         flash('An error occurred loading the admin dashboard.')
-        # Redirect to login with the correct endpoint on error
         return redirect(url_for('auth.login'))
 
     finally:
@@ -65,10 +75,14 @@ def admin_dashboard():
         if conn:
             conn.close()
 
-    return render_template('admin_dashboard.html', 
-                           events=events, 
-                           registrations=registrations, 
+    # Pass all the data to the template
+    return render_template('admin_dashboard.html',
+                           events=events,
+                           registrations=registrations,
                            notices=notices,
+                           total_students=total_students, 
+                           total_events=total_events,     
+                           total_notices=total_notices,
                            admin_name=session.get('user_name'))
 
 
@@ -308,11 +322,11 @@ def delete_notice(notice_id):
     cursor = conn.cursor()
     
     # Delete the notice
-    cursor.execute("DELETE FROM notices WHERE id = %s", (notice_id,))
+    cursor.execute("DELETE FROM notices WHERE notice_id = %s", (notice_id,))
     conn.commit()
     cursor.close()
     conn.close()
-    
+
     flash("Notice deleted successfully", "success")
     return redirect(url_for('admin.send_notice'))
 

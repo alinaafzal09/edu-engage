@@ -62,3 +62,4 @@ app.register_blueprint(event_bp, url_prefix='/event')
 
 if __name__ == "__main__":
     app.run(debug=True)
+
